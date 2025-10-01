@@ -12,4 +12,6 @@ Ennek idézőjeles kicsomagolása körülbelül 5-10 percet vesz igénybe (merev
 
 > A konténer végleges mérete körülbelül ~3.5 és 4 GB körül mozog.
 
+Weboldal, ahol futtatás után el tudod érni: [localhost:6080/vnc.html](http://localhost:6080/vnc.html) 
+
 ~~docker.io-ra még nem sikerült feltölteni, nézzétek el kérlek~~
