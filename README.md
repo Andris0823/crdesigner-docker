@@ -1,6 +1,7 @@
 # Commonroad-scenario-designer docker
 Konténerizált megoldás a *"Bevezetés az önvezető autók fejlesztésébe"* című tárgyhoz, mivel az órához kötelező program rendkívül minek van.
-A program GitHub repoja: [Commonroad-scenario-designer](https://github.com/CommonRoad/commonroad-scenario-designer)
+*A program GitHub repoja: [**Commonroad-scenario-designer**](https://github.com/CommonRoad/commonroad-scenario-designer).*
+
 Mivel 3 Linux distro-n nem sikerült natívan működésre bírni egy nagyobb workaround nélkül, így gondoltam bedobom egy docker-be, és akkor másnak nem lesz szenvedés a program használata.
 A feltöltött fájlok között van egy Build, és van egy Csomagolt változat.
 
