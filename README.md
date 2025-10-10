@@ -4,24 +4,12 @@
 Konténerizált megoldás a *"Bevezetés az önvezető autók fejlesztésébe"* című tárgyhoz, mivel az órához kötelező program rendkívül minek van.
 Mivel 3 Linux distro-n nem sikerült natívan működésre bírni egy nagyobb workaround nélkül, így gondoltam bedobom egy docker-be, és akkor másnak nem lesz szenvedés a program használata.
 
-A feltöltött fájlok között van a **Build**, és van egy **Csomagolt** (.tar) változat a Release-ben. Lentebb mindegyik alá odaraktam a parancsot is, amivel tudod futtatni.\
-Felraktam docker.io-ra is, szerintem onnan a legegyszerűbb megoldani az egészet.
-
-**Docker.io image pull** parancsa, és innen le tudod húzni az image-et:\
-`docker pull andris0823/commonroad-designer:latest`\
-Majd:\
-`docker run -it --rm -p 6080:6080 -p 5900:5900 andris0823/commonroad-designer:latest`
-
-**Build változat** fő lényege: Ha nagyon nem szereted magad, akkor megpróbálhatod optimalizálni a dependency listát, amire én már azért nem fordítottam figyelmet, mert így is örültem, hogy elindult.
-Build time SSD és merevlemez között kérdőjeles időt vesz igénybe, az én kis krumplimon *(SSD-n)* 400 másodperc volt a leghosszabb talán.\
 `docker build -t commonroad-designer .`\
-`docker run -it --rm -p 6080:6080 -p 5900:5900 commonroad-designer`
+Majd Linuxon *(A pwd az a terminal aktuális mappája)*:\
+`docker run -it --rm -p 6080:6080 -v "$(pwd)/saved_files:/app/files" commonroad-designer`
 
-**Csomagolt változat**: Ha nem szeretnéd magadnak buildelni, akármilyen okból kifolyólag, akkor ezt töltsd le. Kicsit nagyobb *(866MB)*, viszont ez offline is működik *(persze, ha le van szedve :D)*
-Ennek idézőjeles kicsomagolása körülbelül 5-10 percet vesz igénybe *(merevlemezen lehet több is)*. Ha a batch scriptet használod, akkor az nem ír részletes folyamatot, szóval nem kell megijedni, megy a háttérben a folyamat.\
-`docker load -i commonroad-designer.tar`\
-`docker run -it --rm -p 6080:6080 -p 5900:5900 commonroad-designer`
+Programon belül történő fájl mentése a "/app/files" mappába menjen, és akkor a saját gépeden is látni fogod. *(Mentéskor alapból a "/app" mappába mutat, ott pedig csak be kell lépni a "/files" mappába)*
 
-> A konténer végleges mérete körülbelül ~3.5GB körül mozog.
+> A konténer végleges mérete körülbelül *(optimalizálás előtt ~3.5GB)* ~1.87GB körül mozog.
 
 Weboldal, ahol futtatás után el tudod érni: [localhost:6080/vnc.html](http://localhost:6080/vnc.html) 
