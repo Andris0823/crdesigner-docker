@@ -10,15 +10,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
     libxcb-render0 libxcb-shape0 libxcb-shm0 libxcb-sync1 \
     libxcb-xfixes0 libxcb-xinput0 libxcb-xkb1 \
-    && rm -rf /var/lib/apt/lists/*
-RUN python3 -m venv /opt/venv
+    && rm -rf /var/lib/apt/lists/* \
+    && python3 -m venv /opt/venv
+
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install --upgrade pip
+
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
 WORKDIR /app
-RUN git clone https://github.com/CommonRoad/commonroad-scenario-designer.git .
-RUN pip install --no-cache-dir --no-deps .
+RUN git clone --depth 1 https://github.com/CommonRoad/commonroad-scenario-designer.git . \
+    && pip install --no-cache-dir --no-deps .
 
 
 # --- STAGE 2: The "Final" Image ---
