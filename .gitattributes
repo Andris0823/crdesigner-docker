@@ -1,0 +1,17 @@
+# Ensure shell scripts always use LF line endings (Unix style)
+# This prevents Windows Git from converting to CRLF
+*.sh text eol=lf
+
+# Docker-related files should also use LF
+Dockerfile text eol=lf
+*.conf text eol=lf
+
+# General text files
+*.md text
+*.txt text
+*.py text
+
+# Binary files
+*.tar binary
+*.gz binary
+*.zip binary
