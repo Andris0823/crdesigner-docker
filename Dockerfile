@@ -2,6 +2,7 @@
 FROM python:3.10-slim
 
 # --- Alap csomagok + build eszközök + GUI dependencies ---
+# HOZZÁADVA: python3-pyxdg az Openbox hibaüzenet javítására
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
 	openbox \
@@ -13,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	wget curl git procps \
     python3-dev \
     build-essential \
+    python3-pyxdg \
     libglib2.0-0 \
     libsm6 \
     libxrender1 \
@@ -44,20 +46,49 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Munka könyvtár
 WORKDIR /app
 
-# Repo klónozása
-RUN git clone https://github.com/CommonRoad/commonroad-scenario-designer.git /app
+# A legfrissebb verzió klónozása
+RUN git clone https://github.com/CommonRoad/commonroad-scenario-designer.git .
 
-# Minimal pip requirements a pyproject.toml alapján
-RUN echo "commonroad-io>=2024.2,<=2024.3\ncommonroad-clcs>=2025.1\ncommonroad-drivability-checker==2025.1\ncommonroad-sumo>=2025.1.3\npyqt6>=6.6.0\nmatplotlib>=3.6.0\nnumpy>=1.26.1\nscipy>=1.11.3\nlxml>=6.0.2\npyproj>=3.4.1\nutm>=0.7.0\nmgrs>=1.4.5\nshapely>=2.0.1\nnetworkx>=3.0\npyyaml>=6.0\nrequests>=2.31.0\npandas>=2.0.2\ntyper==0.9.0\nclick==8.0.4" > requirements.txt
+# --- A pyproject.toml alapján készítünk egy TELJES requirements.txt fájlt, a 'typer' verzióját felülírva ---
+RUN echo "commonroad-io>=2024.2,<=2024.3\n\
+commonroad-clcs>=2025.1\n\
+commonroad-drivability-checker>=2025.1\n\
+commonroad-sumo>=2025.1.3\n\
+pyqt6>=6.6.0\n\
+matplotlib>=3.6.0\n\
+numpy>=1.26.1\n\
+scipy>=1.11.3\n\
+lxml>=6.0.2\n\
+pyproj>=3.4.1\n\
+utm>=0.7.0\n\
+mgrs>=1.4.5\n\
+shapely>=2.0.1\n\
+ordered-set>=4.1.0\n\
+iso3166>=2.1.1\n\
+networkx>=3.0\n\
+omegaconf>=2.3.0\n\
+pyyaml>=6.0\n\
+pygeodesy>=23.3.23\n\
+mercantile>=1.2.1\n\
+urllib3>=2.0.3\n\
+typer>=0.12.3\n\
+typing-extensions>=4.8.0\n\
+antlr4-python3-runtime==4.9.3\n\
+pymetis>=2020.1\n\
+similaritymeasures>=0.4.4\n\
+kdtree>=0.16\n\
+pandas>=2.0.2\n\
+requests>=2.31.0\n\
+pyclothoids>=0.1.5" > requirements.txt
 
 # Python csomagok telepítése
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir --no-deps .
 
 # Wrapper script és supervisord beállítások
-COPY start_crdesigner.sh /app/start_crdesigner.sh
-RUN chmod +x /app/start_crdesigner.sh
+COPY start-gui.sh /app/start-gui.sh
+RUN chmod +x /app/start-gui.sh
 
 RUN mkdir -p /etc/supervisor/conf.d
 COPY supervisord.conf /etc/supervisor/supervisord.conf
