@@ -60,7 +60,7 @@ Leállítás: a futó terminálban Ctrl+C
 docker load -i crdesigner.tar
 ```
 
-2) Futtatás (példa `latest` taggel):
+2) Futtatás:
 - Bash (Linux/macOS/WSL):
   ```bash
   docker run -it --rm -p 6080:6080 -v "$(pwd)/saved_files:/app/files" crdesigner
